@@ -1,0 +1,101 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls' ]
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+spotless {
+    java {
+        googleJavaFormat('1.19.2')
+        target 'src/**/*.java'
+        importOrder 'java', 'javax', 'org', 'com', ''
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+application {
+    mainClass = 'Main'
+    applicationDefaultJvmArgs = [
+            "--enable-native-access=ALL-UNNAMED",
+            "--enable-native-access=javafx.graphics"
+    ]
+}
+
+//données du projet
+version = "1.0.0"
+
+tasks.register('jpackageDeb', Exec) {
+    dependsOn tasks.named('installDist')
+
+    def appName = "JDLV"
+    def inputDir = layout.buildDirectory.dir("install/" + appName + "/lib").get().asFile
+    def outputDir = layout.buildDirectory.dir("jpackage").get().asFile
+    def iconPath = "${projectDir}/src/main/resources/icon.png"
+
+    def jarName = new File(inputDir as String)
+            .listFiles()
+            .find { it.name == "${appName}-${version}.jar" }
+            .name
+
+    commandLine = [
+            "${System.getProperty('java.home')}/bin/jpackage",
+            '--name', appName,
+            '--app-version', version,
+            '--input', inputDir,
+            '--main-jar', jarName,
+            '--main-class', 'Main',
+            '--type', 'deb',
+            '--dest', outputDir,
+            '--icon', iconPath
+    ] as List<String>
+}
+
+tasks.register('jpackageWin', Exec) {
+    dependsOn tasks.named('installDist')
+
+    def appName = "JDLV"
+    def inputDir = layout.buildDirectory.dir("install/" + appName + "/lib").get().asFile
+    def outputDir = layout.buildDirectory.dir("jpackage").get().asFile
+    def iconPath = "${projectDir}/src/main/resources/icon.ico"
+
+    def jarName = new File(inputDir as String)
+            .listFiles()
+            .find { it.name == "${appName}-${version}.jar" }
+            .name
+
+    commandLine = [
+            "${System.getProperty('java.home')}/bin/jpackage",
+            '--name', appName,
+            '--app-version', version,
+            '--input', inputDir,
+            '--main-jar', jarName,
+            '--main-class', 'Main',
+            '--type', 'msi',
+            '--dest', outputDir,
+            '--icon', iconPath
+    ] as List<String>
+}
+
+
