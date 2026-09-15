@@ -2,7 +2,7 @@
 
 set -e
 
-APP_NAME="pfc"
+APP_NAME="jdlv"
 OUTPUT_DIR="build/jpackage"
 
 java --version || { echo "Java n'est pas installé."; exit 1; }
