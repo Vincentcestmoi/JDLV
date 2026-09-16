@@ -186,6 +186,12 @@ Commandes
 
     M (en jeu) → ouvrir le menu de jeu
 
+    + (en jeu) → ralentir la vitesse du jeu
+
+    + (en jeu) → accélérer la vitesse du jeu
+
+    c (en jeu) → changer la couleur d'une cellule au hasard
+
 
 ## 🧪 7. Dépannage
 ### JavaFX : erreur “wrong class version”

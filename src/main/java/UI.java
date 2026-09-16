@@ -11,7 +11,7 @@ public class UI {
     private static double tailleTexte;
     private static double tailleTexteRectangle;
     
-    private static final Color COULEUR_RECTANGLE = Color.GRAY;
+    public static final Color COULEUR_RECTANGLE = Color.GRAY;
     static final Color COULEUR_FOND = Color.DARKGRAY;
     static final Color COULEUR_TEXTE = Color.WHITE;
     private static final Color COULEUR_PLUS = Color.DARKBLUE;

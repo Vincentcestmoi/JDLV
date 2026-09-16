@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
 import java.util.function.Consumer;
 
 public class Controller {
-    private final Config config = new Config(100, 2);
+    private final Config config = new Config(100, 2, Start.VIDE);
     
     public int getDelai() {
         return config.getDelai();
@@ -18,6 +18,14 @@ public class Controller {
         return config.getNbCaseSquared();
     }
     
+    public Start getStart(){
+        return config.getType();
+    }
+    
+    public Config getConfig(){
+        return config;
+    }
+    
     public void menu(StackPane root) {
         UI.init(config.initialisationBase());
         
@@ -25,27 +33,40 @@ public class Controller {
         
         VBox contenant = DefaultVBox();
         
-        Text titreNbCase = Auxiliaire.SpecifiqueText("Nombre de cases (peut causer du lag)", UI.COULEUR_TEXTE, UI.getTailleTexteRectangle());
+        Text titreNbCase = Auxiliaire.specifiqueText("Nombre de cases (peut causer du lag)", UI.COULEUR_TEXTE, UI.getTailleTexteRectangle());
         contenant.getChildren().add(titreNbCase);
         
         contenant.getChildren().add(UI.prepare(config.getNbCase(), config::addNbCase, config::reduitNbCase));
         
+        Text typeDepart = Auxiliaire.specifiqueText("type de partie à lancer", UI.COULEUR_TEXTE, UI.getTailleTexteRectangle());
+        contenant.getChildren().add(typeDepart);
+        
+        contenant.getChildren().add(UI.prepare(config.getType(), config::addType, config::reduitType));
+        
         Consumer<MouseEvent> event = ignored -> lancerPartie(root);
         
-        communMenu(contenant, "Lancer", event);
+        communMenu(root, contenant, "Lancer", event);
         
         root.getChildren().add(contenant);
     }
     
-    public void communMenu(VBox contenant, String textBoutonBas, Consumer<MouseEvent> eventBoutonBas){
+    public void communMenu(StackPane root, VBox contenant, String textBoutonBas, Consumer<MouseEvent> eventBoutonBas){
         
-        Text titreDelay = Auxiliaire.SpecifiqueText("Délai entre chaque frames (en millisecondes)", UI.COULEUR_TEXTE, UI.getTailleTexteRectangle());
+        Text titreDelay = Auxiliaire.specifiqueText("Délai entre chaque frames (en millisecondes)", UI.COULEUR_TEXTE, UI.getTailleTexteRectangle());
         contenant.getChildren().add(titreDelay);
         
         contenant.getChildren().add(UI.prepare(config.getDelai(), config::addDelai, config::reduitDelai));
         
-        Text espace = Auxiliaire.SpecifiqueText("I'm invisible", Color.TRANSPARENT, UI.getTailleTexteRectangle());
+        Text espace = Auxiliaire.specifiqueText("I'm invisible", Color.TRANSPARENT, UI.getTailleTexteRectangle());
         contenant.getChildren().add(espace);
+        
+        RectangleText config = new RectangleText(UI.COULEUR_RECTANGLE, UI.getHauteur(), UI.getLargeur(), "personnaliser les règles", UI.COULEUR_TEXTE, UI.getTailleTexte());
+        config.setEvent(ignored -> Depart.getController().getConfig().getRule().menu(root));
+        
+        contenant.getChildren().add(config);
+        
+        Text espace2 = Auxiliaire.specifiqueText("I'm invisible too", Color.TRANSPARENT, UI.getTailleTexteRectangle());
+        contenant.getChildren().add(espace2);
         
         RectangleText reprise = new RectangleText(Color.GREEN, UI.getHauteur(), UI.getLargeur(), textBoutonBas, UI.COULEUR_TEXTE, UI.getTailleTexte());
         reprise.setEvent(eventBoutonBas::accept);
@@ -59,7 +80,7 @@ public class Controller {
         
         VBox contenant = DefaultVBox();
         
-        communMenu(contenant, "Reprendre", config.getRepriseJeu());
+        communMenu(root, contenant, "Reprendre", config.getRepriseJeu());
         
         root.getChildren().add(contenant);
     }

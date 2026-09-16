@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class RectangleText extends StackPane {
     private final Rectangle rectangle;
-    private final Color couleurRectangle;
+    private Color couleurRectangle;
     private final Text text;
     
     private AnimationTimer timer = null;
@@ -22,7 +22,7 @@ public class RectangleText extends StackPane {
     private static final int delaiMin = 16; //capacité maximale de AnimationTimer
     
     RectangleText(Color couleur, double hauteur, double largeur, String texte, Color couleurText, double tailleTexte){
-        text = Auxiliaire.SpecifiqueText(texte, couleurText, tailleTexte);
+        text = Auxiliaire.specifiqueText(texte, couleurText, tailleTexte);
         rectangle = new Rectangle(largeur, hauteur, couleur);
         couleurRectangle = couleur;
         getChildren().addAll(rectangle, text);
@@ -92,6 +92,15 @@ public class RectangleText extends StackPane {
             return base.saturate();
         } else {
             return base.invert();
+        }
+    }
+    
+    public void setColor(Color color) {
+        couleurRectangle = color;
+        rectangle.setFill(color);
+        if(getOnMouseClicked() != null){
+            setOnMouseEntered(ignored -> rectangle.setFill(alterer(couleurRectangle)));
+            setOnMouseExited(ignored -> rectangle.setFill(couleurRectangle));
         }
     }
 }

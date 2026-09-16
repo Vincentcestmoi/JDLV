@@ -8,7 +8,7 @@ import java.util.Locale;
 public class Auxiliaire {
     private static DecimalFormat df = null;
     
-    public static Text SpecifiqueText(String texte, Color couleur, double taille) {
+    public static Text specifiqueText(String texte, Color couleur, double taille) {
         Text text = new Text(texte);
         text.setFont(javafx.scene.text.Font.font(taille));
         text.setFill(couleur);

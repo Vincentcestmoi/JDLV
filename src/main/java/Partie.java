@@ -12,14 +12,14 @@ public class Partie {
     
     public void lancer(StackPane root) {
         final Controller controller = Depart.getController();
-        grille.reset(controller.getNbCaseSquared());
+        grille.reset(controller);
         root.getChildren().clear();
         root.getChildren().add(grille);
         boucle(controller.getDelai());
         stop(); //on commence immobile
     }
     
-    private void boucle(double delai) {
+    void boucle(double delai) {
         if(timeline != null){
             timeline.stop();
             timeline.getKeyFrames().setAll(new KeyFrame(
@@ -72,11 +72,13 @@ public class Partie {
     }
     
     public void next() {
-        if(timeline != null){
-            System.out.println(1);
+        if(enCours){
             return;
         }
-        System.out.println(2);
         tour();
+    }
+    
+    public void chaos() {
+        grille.chaos();
     }
 }

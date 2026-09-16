@@ -6,6 +6,7 @@ public class Cellule {
     
     public Cellule(boolean vivant) {
         this.vivant = vivant;
+        this.temp = vivant;
     }
     
     public void inverse(){

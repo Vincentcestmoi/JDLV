@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 public class Config {
     private int delai;
     private int indexNbCase;
+    private Start type;
+    private final CustomChoix rules = new CustomChoix();
     
     private Consumer<MouseEvent> repriseJeu = null;
     
@@ -32,13 +34,18 @@ public class Config {
         return new double[]{hauteur, largeur, tailleTexte, tailleTexteRectangle};
     }
 
-    public Config(int delai, int indexNbCase) {
+    public Config(int delai, int indexNbCase, Start type) {
         this.delai = delai;
         this.indexNbCase = indexNbCase;
+        this.type = type;
     }
     
     public int getDelai() {
         return delai;
+    }
+    
+    public Start getType(){
+        return type;
     }
     
     public void setDelai(int delai) {
@@ -56,6 +63,10 @@ public class Config {
     public int getNbCase(){
         final int racine = nbPossible[getIndexNbCase()];
         return racine * racine;
+    }
+    
+    public void setType(Start type){
+        this.type = type;
     }
     
     public int getNbCaseSquared(){
@@ -88,7 +99,9 @@ public class Config {
         }
         delai -= step;
         setDelai(delai);
-        rectangle.setTexte(String.valueOf(delai));
+        if(rectangle != null) {
+            rectangle.setTexte(String.valueOf(delai));
+        }
     }
     
     void addDelai(RectangleText rectangle){
@@ -101,7 +114,34 @@ public class Config {
         }
         delai += step;
         setDelai(delai);
+        if(rectangle != null){
         rectangle.setTexte(String.valueOf(delai));
+        }
+    }
+    
+    void addType(RectangleText rectangle){
+        int index = getType().ordinal();
+        index += 1;
+        index %= Start.values().length;
+        setType(Start.values()[index]);
+        rectangle.setTexte(String.valueOf(getType()));
+    }
+    
+    void reduitType(RectangleText rectangle){
+        int index = getType().ordinal();
+        index -= 1;
+        index += type.ordinal();
+        index %= Start.values().length;
+        setType(Start.values()[index]);
+        rectangle.setTexte(String.valueOf(getType()));
+    }
+    
+    boolean getRule(boolean vivant, int voisinsVivants){
+        return rules.get(vivant, voisinsVivants);
+    }
+    
+    CustomChoix getRule(){
+        return rules;
     }
     
     public void reprendreJeu(){

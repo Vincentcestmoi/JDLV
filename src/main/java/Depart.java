@@ -64,11 +64,28 @@ public class Depart extends Application {
           partie.stop();
           controller.menuPartie(root, partie);
         }
-      } else if(code == KeyCode.PLUS) {
+      } else if(code == KeyCode.N) {
         if(partie != null) {
           partie.next();
         }
+      } else if(code == KeyCode.ADD) {
+        if(partie != null) {
+          controller.getConfig().addDelai(null);
+          partie.boucle(controller.getDelai());
+        }
+      } else if(code == KeyCode.SUBTRACT) {
+        if(partie != null) {
+          controller.getConfig().reduitDelai(null);
+          partie.boucle(controller.getDelai());
+        }
+      } else if(code == KeyCode.C){
+        if(partie != null) {
+          partie.chaos();
+        }
       }
+      /* else {
+        System.out.println("input sans valeur : " + code);
+      }*/
     });
     
     controller.menu(root);
